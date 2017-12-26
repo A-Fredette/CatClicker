@@ -1,0 +1,30 @@
+.catImage {
+  width: 80%;
+}
+
+.click-display {
+  margin-left: 45%;
+  padding-top: 20px; 
+}
+
+.click-bait {
+   display: block;
+  margin-left: 25%;
+  padding-top: 20px;
+}
+
+.name {
+  display: block;
+  margin-left: 45%;
+}
+
+.nav-list {
+  border: 3px black solid;
+  display: inline-flex;
+  margin-top: 20px;  
+  width: 15%;
+}
+
+td:hover {
+  color: blue;
+}

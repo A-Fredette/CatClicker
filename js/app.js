@@ -3,11 +3,13 @@
 // Separate out your view and your data, they should never interact
 // The controller allows the two separations to interact
 
+
 // where all the data is stored. will not directly interact with the view.
 let data = {
   lastID : 0,
   catList: []
 };
+
 
 // interacts directly with the modal and the view
 let controller = {
@@ -29,43 +31,28 @@ let controller = {
 
   addClick: function(id) {
     ++data.catList[id].clicks;
+    $('.click-display').html('Clicks: '+data.catList[id].clicks);
 
-  },
-
-  click : function() {
-    const catImage = $('.catImage');
-
-  //event listener for click on catImage
-    $('.catImage').on('click', function(e) {
-
-      let clickId = $(this).attr('data-id');
-      console.log(data.catList[clickId].clicks);
-
-      //use clickId to gather data (this is in the nav view)
-      let name = data.catList[clickId].name;
-      let imageSrc = data.catList[clickId].img;
-      let clickNum = data.catList[clickId].clicks;
-
-      view.catDisplay(name, img, clicks);
-
-
-    });
   },
 
   init: function(id) {
-    view.catDisplay(data.catList[0].name, data.catList[0].img, data.catList[0].clicks, data.catList[0].id);
+    controller.displayCat(0);
     view.renderNav(data.catList);
     view.init();
   },
 
+  displayCat: function(id) {
+    const clickDisplay = $('.click-display');
+    const nameDisplay = $('.name');
+    let catImage = $('.catImage');
+
+    //display cat name, clicks and img; assign data-id
+    $(nameDisplay).html('Name: '+data.catList[id].name);
+    $(clickDisplay).html('Clicks: '+data.catList[id].clicks);
+    $(catImage).attr('src', data.catList[id].img).attr('data-id', id);
+  },
 };
 
-
-controller.addCat('Mr. Fantastic', 'images/meow.jpg');
-controller.addCat('Elon', 'images/meow2.jpg');
-controller.addCat('Mr. Regal', 'images/meow3.jpg');
-controller.addCat('Mr. Fluffels', 'images/meow4.jpg');
-controller.addCat('Countess', 'images/meow5.jpg');
 
 let view = {
 
@@ -74,20 +61,16 @@ let view = {
     let catImage = $('.catImage');
 
     catImage.click(function(){
-      console.log('clicked');
-
       let clickID = catImage.attr('data-id');
-
-      controller.clickAdd(clickID);
+      controller.addClick(clickID);
     });
 
+    // displauys navigation table
     let navItems = $('td');
-
     navItems.click(function(){
-      let clickID = navItems.attr('data-id');
-
+      let clickID = $(this).attr('data-id');
+      controller.displayCat(clickID);
     });
-
   },
 
   // Renders the first cat image, clicks, etc
@@ -100,9 +83,7 @@ let view = {
     //display cat name, clicks and img; assign data-id
     $(nameDisplay).html('Name: '+name);
     $(clickDisplay).html('Clicks: '+clicks);
-    $(catImage).attr('src', img).attr('data-id', id);
-
-    
+    $(catImage).attr('src', img).attr('data-id', id);  
   },
 
   renderNav: function(catList) {
@@ -115,53 +96,10 @@ let view = {
 
 };
 
-controller.init(0);
+  controller.addCat('Mr. Fantastic', 'images/meow.jpg');
+  controller.addCat('Elon', 'images/meow2.jpg');
+  controller.addCat('Mr. Regal', 'images/meow3.jpg');
+  controller.addCat('Mr. Fluffels', 'images/meow4.jpg');
+  controller.addCat('Countess', 'images/meow5.jpg');
 
-
-
-
-
-/*
-
-class Cat {
-  constructor(name, img, id) {
-    this.name = name;
-    this.clicks = 0;
-    this.img = img;
-    this.id = id;
-  }
-
-  displayCat(){
-    console.log('clicked!');
-    $(nameDisplay).html('Name: '+this.name);
-    $(clickDisplay).html('Clicks: '+this.clicks);
-    $('.catImage').attr('src', this.img).attr('data-id', this.id);
-  }
-
-  clicked() {
-    this.clicks ++;
-    $(clickDisplay).html('Clicks: '+this.clicks);
-  }
-}
-
-function writeNav(navList) {
-  let nav = $('.nav-table');
-  $(navList).each(function(index) {
-    $(nav).append('<tr><td data-id="'+navList[index].id+'">'+navList[index].name+'</td></tr>');
-  });
-}
-
-writeNav(catList);
-
-$('td').click(function() {
-  let clickId = $(this).attr('data-id');
-  catList[clickId].displayCat();
-});
-
-$('.catImage').click(function() {
-  let clickId = $(this).attr('data-id');
-  catList[clickId].clicked();
-});
-
-
-*/
+  controller.init(0);
